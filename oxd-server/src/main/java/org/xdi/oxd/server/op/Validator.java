@@ -61,7 +61,7 @@ public class Validator {
     public static RSASigner createRSASigner(Jwt jwt, OpenIdConfigurationResponse discoveryResponse, PublicOpKeyService keyService) {
         final String jwkUrl = discoveryResponse.getJwksUri();
         final String kid = jwt.getHeader().getClaimAsString(JwtHeaderName.KEY_ID);
-        final String algorithm = jwt.getHeader().getClaimAsString(JwtHeaderName.ALGORITHM);
+        final String algorithm = Strings.isNullOrEmpty(jwt.getHeader().getClaimAsString(JwtHeaderName.ALGORITHM)) ? new String("RS256") : jwt.getHeader().getClaimAsString(JwtHeaderName.ALGORITHM);
         final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.fromString(algorithm);
 
         final RSAPublicKey publicKey = keyService.getRSAPublicKey(jwkUrl, kid);
